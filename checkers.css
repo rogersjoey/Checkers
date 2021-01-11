@@ -43,5 +43,13 @@ h1{
 }
 .black-checker{
     background-color: black;
+}
 
+.selected {
+    border: 1px solid yellow;
+}
+
+.out-of-play{
+    height: 10vmin;
+    width: 10vmin;
 }

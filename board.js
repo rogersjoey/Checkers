@@ -1,6 +1,7 @@
 $(document).ready(function() {
     console.log('document ready')
     $('board-container').html(renderBoard())
+    $(`.black.cell`).click(moveCheckerHere)
     renderCheckers()
     $('.checker').click(selectChecker)
 })
@@ -16,10 +17,10 @@ function toggle() {
 function switchColor (checker) {
     if (checker.hasClass('black-checker')){
         checker.removeClass('black-checker')
-        checker.addClass('white-checker')
+        checker.addClass('red-checker')
     } else {
         checker.addClass('black-checker')
-        checker.removeClass('white-checker')
+        checker.removeClass('red-checker')
     }
 }   
 
@@ -67,7 +68,26 @@ function cellColor(cellNum,rowNum){
     return parity(cellNum) == parity(rowNum)? 'red' : 'black'
 }
 
+function moveCheckerHere(){
+    if(selectedChecker) {
+        console.log('move checker')
+        let blackCell = $(this)
+        let id = blackCell.attr('id')
+        let idParts = id.split('-')
+        selectedChecker.row = idParts[1]
+        selectedChecker.cell = idParts[2]
+        selectedChecker = undefined
+        renderCheckers()
+    }else{
+        console.log('select a checker')
+    }
+}
 
+function clearBoard() {
+    $(`.black.cell`).html('')
+    $(`.black.cell`).unbind('click')
+    $('.out-of-play').html(``)
+}
 
 
 

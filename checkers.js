@@ -28,19 +28,47 @@ let checkers = [
 ]
 
 function renderCheckers(){
-    console.log('rendering checkers')
+    clearBoard()
+    $(`.black.cell`).click(moveCheckerHere)
     for(let i=0; i<checkers.length; i++){
         let checker = checkers[i];
         console.log(checker)
-        $(`#cell-${checker.row}-${checker.cell}`).html(renderChecker(checker.color))
+        if(checker.row && checker.cell){
+            $(`#cell-${checker.row}-${checker.cell}`).html(renderChecker(i, checker.color))
+            $(`#cell-${checker.row}-${checker.cell}`).unbind(`click`)
+        } else {
+            $(`#out-of-play-${checker.color}`).append(renderChecker(i, checker.color))
+        }
     }
+    $(`.checker`).click(selectChecker)
 }
 
-function renderChecker(color) {
-    return `<div class="checker ${color}-checker"></div`
+function renderChecker(i, color) {
+    return `<div id="checker-${i}" class="checker ${color}-checker"></div`
 }
 
-function selectChecker(checker){
-    console.log("selecting checker: ", checker)
-    selectedChecker = checker
+function selectChecker(){
+    let checker = $(this)
+    if(checker.hasClass('selected')){
+        console.log('already selected')
+        remove()
+        return
+    }
+    $('.selected').removeClass('selected')
+
+    let id = checker.attr('id')
+    let checkerId = id.split('-')[1]
+    // console.log('selecting checker: ', checker)
+    // console.log(`the id of the checker you selected is ${id}`)
+    // console.log(checkerId)
+    
+    selectedChecker = checkers[checkerId]
+    checker.addClass('selected')
+}
+
+function remove(){
+    selectedChecker.row=undefined
+    selectedChecker.cell=undefined        
+    selectedChecker = undefined
+    renderCheckers()
 }
